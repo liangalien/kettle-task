@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liangalien.kt.dao.FileRepoDAO">
+    <select id="selectById" resultType="com.liangalien.kt.dto.FileRepoDTO">
+        select
+            f.*,
+            p.`key` as project_key,
+            p.name as project_name
+        from kt_file_repo f join kt_project p on f.project_id=p.id
+        where f.id=#{id}
+    </select>
+
+    <select id="selectByName" resultType="com.liangalien.kt.dto.FileRepoDTO">
+        select
+            f.*,
+            p.`key` as project_key,
+            p.name as project_name
+        from kt_file_repo f join kt_project p on f.project_id=p.id
+        where f.project_id = #{projectId} and f.file_name = #{fileName}
+    </select>
+
+    <select id="selectAll" resultType="com.liangalien.kt.dto.FileRepoDTO">
+        select
+            f.*,
+            p.`key` as project_key,
+            p.name as project_name
+        from kt_file_repo f join kt_project p on f.project_id=p.id
+        where f.is_deleted = 0
+        <if test="search != null and search.project_id != null">
+            and f.project_id = #{search.project_id}
+        </if>
+        <if test="search != null and search.keyword != null">
+            and f.file_name like concat('%', #{search.keyword} ,'%')
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.liangalien.kt.dto.FileRepoDTO">
+        update kt_file_repo
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="fileName != null">
+                file_name = #{fileName},
+            </if>
+            <if test="fileType != null">
+                file_type = #{fileType},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <update id="remove">
+        update kt_file_repo set is_deleted=1 and update_by=#{updateBy} where id=#{id}
+    </update>
+
+    <insert id="insert" parameterType="com.liangalien.kt.dto.FileRepoDTO">
+        insert into kt_file_repo (project_id, file_name, file_type, create_by, update_by)
+        values(#{projectId}, #{fileName}, #{fileType}, #{createBy}, #{createBy})
+
+    </insert>
+</mapper>

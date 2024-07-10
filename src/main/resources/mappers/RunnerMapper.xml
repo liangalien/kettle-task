@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liangalien.kt.dao.RunnerDAO">
+    <insert id="insert" parameterType="com.liangalien.kt.dto.RunnerDTO">
+        insert into kt_runner (task_id, `trigger`, status, create_by, start_time, end_time)
+        values (#{taskId}, #{trigger}, #{status}, #{createBy}, #{startTime}, #{endTime})
+        <selectKey keyProperty="id" resultType="java.math.BigInteger" order="AFTER">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <update id="update" parameterType="com.liangalien.kt.dto.RunnerDTO">
+        update kt_runner
+        <set>
+            <if test="taskId != null">
+                task_id = #{taskId},
+            </if>
+            <if test="trigger != null">
+                `trigger` = #{trigger},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="selectAll" resultType="com.liangalien.kt.dto.RunnerDTO">
+        select r.*, t.project_id, t.name as task_name,
+               fr.file_type as repo_type, fr.file_name as repo_name,
+               p.`key` as project_key, p.name as project_name
+        from kt_runner r
+        join kt_task t on r.task_id = t.id
+        join kt_file_repo fr on fr.id = t.repo_id
+        join kt_project p on t.project_id=p.id
+        where t.is_deleted = 0 and fr.is_deleted = 0
+        <if test="search != null and search.project_id != null">
+            and t.project_id = #{search.project_id}
+        </if>
+        <if test="search != null and search.status != null">
+            and r.status = #{search.status}
+        </if>
+        <if test="search != null and search.start != null and search.end != null">
+            and r.start_time between #{search.start} and #{search.end}
+        </if>
+        <if test="search != null and search.task_id != null">
+            and r.task_id = #{search.task_id}
+        </if>
+        <if test="search != null and search.repo_type != null">
+            and fr.file_type = #{search.repo_type}
+        </if>
+        <if test="search != null and search.keyword != null">
+            and t.name like concat('%', #{search.keyword} ,'%')
+        </if>
+    </select>
+
+    <select id="selectById" resultType="com.liangalien.kt.dto.RunnerDTO">
+        select r.*, t.project_id, t.name as task_name,
+               fr.file_type as repo_type, fr.file_name as repo_name,
+               p.`key` as project_key, p.name as project_name
+        from kt_runner r
+                 join kt_task t on r.task_id = t.id
+                 join kt_file_repo fr on fr.id = t.repo_id
+                 join kt_project p on t.project_id=p.id
+        where t.is_deleted = 0 and fr.is_deleted = 0 and r.id = #{id}
+    </select>
+</mapper>

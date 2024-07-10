@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] [%logger:%L]  - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="MainFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/main.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>logs/main.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <!-- 单个日志文件的最大大小，这里设置为10MB -->
+            <maxFileSize>1MB</maxFileSize>
+            <!-- 最多存储的日志文件数量限制，这里设置为100 -->
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] [%logger:%L]  - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KettleAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/kettle.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>logs/kettle.log.%d{yyyy-MM-dd}.%i</fileNamePattern>
+            <!-- 单个日志文件的最大大小，这里设置为10MB -->
+            <maxFileSize>1MB</maxFileSize>
+            <!-- 最多存储的日志文件数量限制，这里设置为100 -->
+            <maxHistory>100</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%level] [%thread] [%logger:%L]  - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="KettleRunnerAppender" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <discriminator>
+            <key>runner</key>
+            <defaultValue>default</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="${runner}" class="ch.qos.logback.core.FileAppender">
+                <file>logs/runner/${runner}.log</file>
+                <append>false</append>
+                <encoder>
+                    <pattern>%msg%n</pattern>
+                </encoder>
+            </appender>
+        </sift>
+    </appender>
+
+    <logger name="org.pentaho.di" level="DETAIL" additivity="false">
+        <appender-ref ref="KettleAppender" />
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="com.liangalien" level="DETAIL" additivity="false">
+        <appender-ref ref="MainFileAppender" />
+        <appender-ref ref="ConsoleAppender" />
+    </logger>
+
+    <logger name="com.liangalien.kt.kettle.LogListener" level="TRACE"  additivity="false">
+        <appender-ref ref="KettleRunnerAppender"/>
+    </logger>
+
+    <root level="ERROR" >
+        <appender-ref ref="ConsoleAppender" />
+    </root>
+</configuration>
+

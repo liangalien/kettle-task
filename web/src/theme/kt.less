@@ -1,0 +1,108 @@
+.kt-body {
+  padding: 10px 20px;
+
+  .kt-breadcrumb {
+    padding-top: 5px;
+    padding-bottom: 10px;
+  }
+
+  .kt-panel {
+    height: calc(100vh - 150px);
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  th {
+    font-weight: normal;
+    color: #7a627f;
+  }
+}
+
+.kt-dialog {
+  .el-dialog__header {
+    padding: 10px 20px;
+    .el-dialog__title {
+      font-size: 15px;
+    }
+  }
+
+  .el-dialog__body {
+    padding: 10px 20px;
+  }
+
+  .el-dialog__footer {
+    padding: 10px;
+  }
+}
+
+.router-link-active {
+  text-decoration: none !important; /* 去除下划线 */
+}
+
+.el-pagination.is-background .el-pager li {
+  border: 1px solid #00000026 !important;
+  border-radius: 4px !important;
+  font-weight: normal !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;;
+  background: #fff !important;
+}
+
+.el-pagination.is-background .el-pager li.active {
+  border: 1px solid #007bff !important;
+  border-radius: 4px !important;
+  font-weight: normal !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;;
+  color: #007bff !important;
+  background: #fff !important;
+}
+
+.el-pagination.is-background button {
+  border-radius: 4px !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 30px !important;;
+  background: #fff !important;
+  border: 1px solid #00000026 !important;
+}
+
+.el-pagination.is-background .el-pagination__sizes input {
+  border-radius: 4px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+}
+
+.el-pagination.is-background .el-pagination__total {
+  line-height: 32px !important;
+}
+
+.kt-drawer {
+  .el-drawer__body {
+    padding: 0 20px;
+  }
+  .kt-drawer-footer {
+    margin-top: 50px;
+    text-align: center;
+  }
+}
+
+/* 滚动条样式 */
+*::-webkit-scrollbar {
+  width: 6px; /*  设置纵轴（y轴）轴滚动条 */
+  height: 6px; /*  设置横轴（x轴）轴滚动条 */
+}
+/* 滚动条滑块（里面小方块） */
+*::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: #adadad;
+}
+/* 滚动条轨道 */
+*::-webkit-scrollbar-track {
+  border-radius: 0;
+  box-shadow: inset 0 0 5px transparent;
+}
