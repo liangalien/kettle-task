@@ -1,19 +1,34 @@
-# Getting Started
+### Kettle在线任务调度平台
 
-### Reference Documentation
+1、支持上传、下载ktr/kjb文件
+2、支持手动执行、定时执行
+3、支持日志实时查看
 
-For further reference, please consider the following sections:
+后端springboot
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.6.13/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.6.13/maven-plugin/reference/html/#build-image)
-* [MyBatis Framework](https://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/)
-* [Spring Web Services](https://docs.spring.io/spring-boot/docs/2.6.13/reference/htmlsingle/#io.webservices)
+```
+mvn install
+```
 
-### Guides
 
-The following guides illustrate how to use some features concretely:
+前端vue、element-ui
+```
+npm i
+npm run dev
+npm run build
+```
 
-* [MyBatis Quick Start](https://github.com/mybatis/spring-boot-starter/wiki/Quick-Start)
-* [Producing a SOAP web service](https://spring.io/guides/gs/producing-web-service/)
 
+
+示例图：
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.png?raw=true)
+
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%951.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%952.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%901.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%902.png?raw=true)
