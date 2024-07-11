@@ -159,7 +159,7 @@
                   type="primary"
                   onClick={() => {
                     this.cornTaskId = row.id;
-                    this.cronName = row.quartz_name;
+                    this.cronName = row.key;
                     this.cronValue = value;
                     this.cronShow = true;
                   }}
@@ -265,7 +265,7 @@
         });
       },
       removeCron() {
-        Http.easyDelete("/api/task/sched/cancel?quartz_name=" + this.cronName, null, resp => {
+        Http.easyDelete("/api/task/sched/cancel?key=" + this.cronName, null, resp => {
           this.$message.success("操作成功");
           this.cronRemoveShow = false;
           this.cronShow = false;

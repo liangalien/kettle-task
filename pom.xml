@@ -120,4 +120,16 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>pnt</id>
+            <name>pnt</name>
+            <url>https://repo.orl.eng.hitachivantara.com/artifactory/pnt-mvn</url>
+        </repository>
+        <repository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 </project>

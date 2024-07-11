@@ -59,12 +59,12 @@ public class TaskController {
     }
 
     @DeleteMapping("/sched/cancel")
-    public Response scheduleCancel(@RequestParam("quartz_name") String quartzName) {
-        if (quartzName == null || "".equals(quartzName)) {
+    public Response scheduleCancel(@RequestParam("key") String taskKey) {
+        if (taskKey == null || "".equals(taskKey)) {
             return Response.fail("参数有误");
         }
 
-        taskService.removeSchedule(quartzName);
+        taskService.removeSchedule(taskKey);
         return Response.success();
     }
 
