@@ -7,8 +7,11 @@
 
 3、支持日志实时查看
 
-后续功能：项目管理、用户管理...
+4、项目管理、登录、注册
 
+5、运行变量在线配置
+
+后续：项目权限、用户权限
 
 
 ### 开发与编译
@@ -31,9 +34,6 @@ kettle:
   plugins: ${user.dir}/plugins  # kettle第三方插件放到哪里（如果有报插件缺失，去把kettle官方下载压缩包中的plugins复制到这里）
 ```
 
-##### kettle变量
-如果kettle中有需要用到变量的地方，需配置KETTLE_HOME环境变量，并在KETTLE_HOME目录中新建一个.kettle/kettle.properties文件放置环境变量信息
-
 
 
 ##### 编译打包
@@ -51,7 +51,6 @@ mvn install -Dmaven.test.skip=true -s settings.xml
 ```
 npm i
 
-npm run build
 ```
 
 ##### 测试环境
@@ -89,17 +88,17 @@ npm run build
 
 生产环境建议使用NGINX作为WEB服务，配置示例：
 
-新建目录：/kettle-task-web
-
-添加kt.conf配置
+1. 新建目录：/kettle-task-web/dist
+2. 将前端build成功后的dist目录所有文件上传至/kettle-task-web/dist
+3. 添加kt.conf配置
 ```
 server {
-    listen 8025;
-    root /kettle-task-web;
+    listen 8020;
+    root /kettle-task-web/dist;
 
 
     location /dist {
-        root  /app/kettle-task-web;
+        root  /kettle-task-web/dist;
     }
 
     location / {
@@ -116,18 +115,26 @@ server {
 }
 ```
 
+##### 访问
+
+http://127.0.0.1:8020
 
 
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E7%99%BB%E5%BD%95%E6%B3%A8%E5%86%8C.png?raw=true)
 
-示例图：
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E9%A1%B9%E7%9B%AE%E5%8F%98%E9%87%8F.png?raw=true)
 
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.png?raw=true)
-
-
-![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%951.png?raw=true)
-
-![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%952.png?raw=true)
 
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%901.png?raw=true)
 
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%902.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E8%AE%B0%E5%BD%95.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E6%97%A5%E5%BF%97.png?raw=true)
+
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E6%89%80%E6%9C%89%E5%AE%9A%E6%97%B6%E7%AE%A1%E7%90%86.png?raw=true)
+
