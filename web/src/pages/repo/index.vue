@@ -2,26 +2,15 @@
   <div>
     <ep-table
       ref="table"
+      size="small"
       :columns="columns"
       :request="request"
-      :search-field="false"
-      :auto-loading="false"
+      search-field="keyword"
     >
       <template #topLeftBefore>
         <div>
           <el-button type="primary" size="small" @click="$refs.upload.value = null; $refs.upload.click()">上传</el-button>
           <input v-show="false" ref="upload" type="file" @change="onUpload" accept=".ktr,.kjb" multiple/>
-        </div>
-        <div>
-          <el-input
-            v-model="search.keyword"
-            clearable
-            style="width: 200px"
-            size="small"
-            placeholder="关键字查询"
-          >
-            <i slot="prefix" class="el-input__icon el-icon-search"></i>
-          </el-input>
         </div>
       </template>
     </ep-table>
@@ -31,19 +20,16 @@
 <script>
   import Http from "@utils/http";
   import EpLink from "@components/link/link";
+  import Common from "@utils/common";
 
   export default {
     name: "RepoList",
     data() {
       return {
         uploading: false,
-        search: {
-          project_id: 1,
-          keyword: null
-        },
         request(option) {
           return new Promise(resolve => {
-            Http.easyPost("/api/repo/file/list", {...option}, resp => {
+            Http.easyPost("/api/repo/file/list", {...option, project_id: Common.getProjectId()}, resp => {
               resolve(resp.body);
             });
           });
@@ -73,7 +59,7 @@
             sortable: true,
             ellipsis: true
           }, {
-            prop: "update_by",
+            prop: "update_by_name",
             label: "更新人",
             width: 120,
             sortable: true,
@@ -125,7 +111,7 @@
         let uploaded = [];
         Array.from(files).map(file => {
           Http.easyUpload('/api/repo/file/upload', 'file', file, {
-            project_id: 1
+            project_id: Common.getProjectId()
           }, resp => {
             uploaded.push(true);
           }, () => {
@@ -143,26 +129,7 @@
         }, 500);
 
       },
-      setSearch: function () {
-        this.$refs.table.search = {
-          search: {
-            keyword: this.search.keyword
-          }
-        };
-        this.$refs.table.refresh();
-      },
     },
-    watch: {
-      search: {
-        handler() {
-          this.setSearch();
-        },
-        deep: true
-      }
-    },
-    mounted() {
-      this.setSearch();
-    }
   }
 </script>
 

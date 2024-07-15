@@ -9,22 +9,21 @@ const service = axios.create({
   // }
 });
 
-var exceptMessage = (error) => {
-  const response = error.response;
-  message({
-    type: 'error',
-    message: '服务异常(' + response ? response.status : 'error' + '): ' + response ? response.statusText : error,
-    showClose: true,
-    duration: 0
-  });
-  if (error.response.status === 401) { // 跳转登录页
-    const next = '?next=' + Common.getCurPath();
-    // 根据返回的data判断是跳转本地登录页还是验证中心登录页
-    window.location.href = error.response.data + (error.response.data == '/common/login' && next || encodeURIComponent(next));
+const exceptMessage = (error) => {
+  if (error.response.status === 403) { // 跳转登录页
+    window.location.href = '/login?redirect=' + encodeURIComponent(Common.getCurPath());
+  } else {
+    const response = error.response;
+    message({
+      type: 'error',
+      message: '服务异常(' + response ? response.status : 'error' + '): ' + response ? response.statusText : error,
+      showClose: true,
+      duration: 0
+    });
   }
 };
 
-var errorMessage = (msg) => {
+const errorMessage = (msg) => {
   message({
     type: 'error',
     message: msg,
@@ -46,7 +45,8 @@ service.easyRequest = (url, method, params, data, success, error, except, final)
     url: url,
     method: method,
     data: data,
-    params: params
+    params: params,
+    headers: {token: Common.getStorage('token') || undefined}
   }).then((res) => {
     if (res.data && res.data.success) {
       if (success) success(res.data);
@@ -77,7 +77,7 @@ service.easyPut = (url, data, success, error = null, except = null, final = null
 };
 
 service.easyUpload = (url, filekey, fileValue, data = null, success, error = null, except = null, final = null) => {
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append(filekey, fileValue);
   if (data) Object.keys(data).map(key => formData.append(key, data[key]));
 
@@ -85,7 +85,10 @@ service.easyUpload = (url, filekey, fileValue, data = null, success, error = nul
     url: url,
     method: 'POST',
     data: formData,
-    headers: { 'Content-type': 'multipart/form-data' }
+    headers: {
+      'Content-type': 'multipart/form-data',
+      token: Common.getStorage('token') || undefined
+    }
   }).then((res) => {
     if (res.data && res.data.success) {
       success(res.data);

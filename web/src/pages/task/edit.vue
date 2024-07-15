@@ -85,7 +85,7 @@
           if (valid) {
             let sendData = {
               id: this.form.id,
-              project_id: 1,
+              project_id: Common.getProjectId(),
               repo_id: this.form.repo.value,
               name: this.form.name,
               description: this.form.description,

@@ -56,3 +56,7 @@ logging:
 kettle:
   repo: ${user.dir}/repo
   plugins: ${user.dir}/plugins
+
+
+jwt:
+  secret: liangalien@12345

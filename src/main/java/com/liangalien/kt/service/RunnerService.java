@@ -30,8 +30,7 @@ public class RunnerService {
 
 
     public List<RunnerDTO> getAll(Map<String, Object> body) {
-        Object search = body.get("search");
-        List<RunnerDTO> runners = runnerDao.selectAll(search != null ? (Map<String, Object>) search : null);
+        List<RunnerDTO> runners = runnerDao.selectAll(body);
         runners.forEach(runner -> {
             if (runner.getStartTime() != null && runner.getEndTime() != null) {
                 runner.setDurations(Duration.between(runner.getStartTime(), runner.getEndTime()).getSeconds());

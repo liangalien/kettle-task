@@ -48,14 +48,16 @@ public class LogListener implements KettleLoggingEventListener {
 
     public static void writeLog(String message, LogLevel level, long timeStamp) {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        String time = null;
-        if (timeStamp == 0L) {
-            time = df.format(new Date());
-        } else {
-            time = df.format(timeStamp);
-        }
-
+        String time = df.format(timeStamp);
         log.trace(String.format("[%s] [%s] - %s", time, level.toString(), message));
+    }
+
+    public static void writeLog(String message, LogLevel level) {
+        writeLog(message, level, new Date().getTime());
+    }
+
+    public static void writeLog(String message) {
+        writeLog(message, LogLevel.BASIC);
     }
 
 

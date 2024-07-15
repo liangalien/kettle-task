@@ -2,30 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.liangalien.kt.dao.FileRepoDAO">
+    <sql id="select">
+        f.*,
+        p.`key` as project_key,
+        p.name as project_name,
+        cu.nickname as create_by_name,
+        uu.nickname as update_by_name
+    </sql>
+
     <select id="selectById" resultType="com.liangalien.kt.dto.FileRepoDTO">
         select
-            f.*,
-            p.`key` as project_key,
-            p.name as project_name
-        from kt_file_repo f join kt_project p on f.project_id=p.id
+        <include refid="select"></include>
+        from kt_file_repo f
+        join kt_project p on f.project_id=p.id
+        left join kt_user cu on f.create_by=cu.username
+        left join kt_user uu on f.update_by=uu.username
         where f.id=#{id}
     </select>
 
     <select id="selectByName" resultType="com.liangalien.kt.dto.FileRepoDTO">
         select
-            f.*,
-            p.`key` as project_key,
-            p.name as project_name
+        <include refid="select"></include>
         from kt_file_repo f join kt_project p on f.project_id=p.id
+        left join kt_user cu on f.create_by=cu.username
+        left join kt_user uu on f.update_by=uu.username
         where f.project_id = #{projectId} and f.file_name = #{fileName}
     </select>
 
     <select id="selectAll" resultType="com.liangalien.kt.dto.FileRepoDTO">
         select
-            f.*,
-            p.`key` as project_key,
-            p.name as project_name
+        <include refid="select"></include>
         from kt_file_repo f join kt_project p on f.project_id=p.id
+        left join kt_user cu on f.create_by=cu.username
+        left join kt_user uu on f.update_by=uu.username
         where f.is_deleted = 0
         <if test="search != null and search.project_id != null">
             and f.project_id = #{search.project_id}
@@ -59,7 +68,7 @@
 
 
     <update id="remove">
-        update kt_file_repo set is_deleted=1 and update_by=#{updateBy} where id=#{id}
+        update kt_file_repo set is_deleted=1, update_by=#{updateBy} where id=#{id}
     </update>
 
     <insert id="insert" parameterType="com.liangalien.kt.dto.FileRepoDTO">

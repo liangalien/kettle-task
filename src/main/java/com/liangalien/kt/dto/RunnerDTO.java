@@ -21,6 +21,7 @@ public class RunnerDTO {
     private int trigger;
     private int status;
     private String createBy;
+    private String createByName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime startTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

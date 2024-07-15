@@ -1,3 +1,28 @@
+body {
+  margin: 0;
+  background-color: #f7f7f7;
+}
+
+.kt-menu {
+  .el-menu-item {
+    float: right;
+  }
+  .el-menu-item.is-disabled {
+    opacity: 1;
+    cursor: default;
+  }
+  .kt-user {
+    i, .el-dropdown {
+      color: #ffffff;
+    }
+    .el-dropdown-link {
+      cursor: pointer;
+      padding: 22px 0;
+    }
+  }
+}
+
+
 .kt-body {
   padding: 10px 20px;
 
@@ -36,8 +61,29 @@
   }
 }
 
+.kt-var-list {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+
+  .el-input--prefix .el-input__inner {
+    padding-left: 70px;
+  }
+
+  .ep-switch {
+    height: 32px;
+    .el-switch__core {
+      width: 60px !important;
+    }
+  }
+}
+
 .router-link-active {
   text-decoration: none !important; /* 去除下划线 */
+}
+
+.el-tag--dark {
+  border-color: transparent;
 }
 
 .el-pagination.is-background .el-pager li {
@@ -85,7 +131,7 @@
     padding: 0 20px;
   }
   .kt-drawer-footer {
-    margin-top: 50px;
+    margin-top: 30px;
     text-align: center;
   }
 }

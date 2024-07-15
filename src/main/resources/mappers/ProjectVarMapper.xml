@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liangalien.kt.dao.ProjectVarDAO">
+    <select id="selectAll" resultType="com.liangalien.kt.dto.ProjectVarDTO">
+        select * from kt_project_var
+        where project_id=#{projectId}
+        <if test="excludeDeleted">
+            and is_deleted=0
+        </if>
+    </select>
+
+    <update id="update" parameterType="com.liangalien.kt.dto.ProjectDTO">
+        update kt_project_var
+        <set>
+            <if test="value != null">
+                `value` = #{value},
+            </if>
+            <if test="isEncode != null">
+                `is_encode` = #{isEncode},
+            </if>
+            <if test="isDeleted != null">
+                `is_deleted` = #{isDeleted},
+            </if>
+            <if test="updateBy != null">
+                `update_by` = #{updateBy},
+            </if>
+        </set>
+        where project_id=#{projectId} and `name`=#{name}
+    </update>
+
+    <update id="remove">
+        update kt_project_var set is_deleted = 1 where project_id=#{projectId}
+    </update>
+
+    <insert id="insert" parameterType="com.liangalien.kt.dto.ProjectDTO">
+        insert into kt_project_var(project_id, `name`, `value`, is_encode, create_by, update_by)
+        values(#{projectId}, #{name}, #{value}, #{isEncode}, #{createBy}, #{createBy})
+    </insert>
+
+    <insert id="inserts" parameterType="java.util.List">
+        insert into kt_project_var(project_id, `name`, `value`, is_encode, create_by, update_by)
+        values
+        <foreach collection="items" separator=","  item="item">
+            (#{item.projectId}, #{item.name}, #{item.value}, #{item.isEncode}, #{item.createBy}, #{item.createBy})
+        </foreach>
+    </insert>
+</mapper>

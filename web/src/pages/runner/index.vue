@@ -2,6 +2,7 @@
   <div>
     <ep-table
       ref="table"
+      size="small"
       :columns="columns"
       :request="request"
       :search-field="false"
@@ -17,7 +18,7 @@
               :label="item.label"
             />
           </el-select>
-          <el-select v-model="search.task_type" style="width: 200px" size="small" clearable placeholder="类型查询">
+          <el-select v-model="search.repo_type" style="width: 200px" size="small" clearable placeholder="类型查询">
             <el-option value="trans" label="转换" />
             <el-option value="job" label="作业" />
           </el-select>
@@ -68,7 +69,7 @@
 
         statusList: Task.statusList,
         search: {
-          project_id: 1,
+          project_id: Common.getProjectId(),
           task_id: Common.getUrlParam('task_id') || undefined
         },
         request(option) {
@@ -139,11 +140,14 @@
               return row.start_time && row.end_time ? value + '秒' : '-';
             }
           }, {
-            prop: "create_by",
-            label: "创建者",
+            prop: "create_by_name",
+            label: "执行人",
             width: 120,
             sortable: true,
             ellipsis: true,
+            render: (h, {value, row}) => {
+              return row.trigger == 2 ? '定时任务' : value;
+            }
           }, {
             label: "操作",
             width: 150,
@@ -232,14 +236,13 @@
           end = dayjs(times[1]).format('YYYY-MM-DD HH:mm:ss');
         }
         this.$refs.table.search = {
-          search: {
-            task_id: this.search.task_id || undefined,
-            task_type: this.search.task_type || undefined,
-            status: Common.isBlank(this.search.status) ? undefined : this.search.status,
-            keyword: this.search.keyword || undefined,
-            start,
-            end
-          }
+          ...this.search,
+          task_id: this.search.task_id || undefined,
+          repo_type: this.search.repo_type || undefined,
+          status: Common.isBlank(this.search.status) ? undefined : this.search.status,
+          keyword: this.search.keyword || undefined,
+          start,
+          end
         };
         this.$refs.table.refresh();
       },

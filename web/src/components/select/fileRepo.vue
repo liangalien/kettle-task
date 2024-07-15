@@ -24,7 +24,7 @@ export default {
     return {
       request: option => {
         return new Promise(resolve => {
-          Http.easyPost('/api/repo/file/list', { ...option, project_id: 1 }, resp => {
+          Http.easyPost('/api/repo/file/list', { ...option, project_id: Common.getProjectId() }, resp => {
             resolve(resp.body);
           });
         });

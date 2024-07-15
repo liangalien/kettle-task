@@ -5,14 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.liangalien.kt.dao.TaskDAO;
 import com.liangalien.kt.dto.QuartzDetailDTO;
 import com.liangalien.kt.dto.TaskDTO;
+import com.liangalien.kt.dto.UserDTO;
 import com.liangalien.kt.kettle.Runner;
 import com.liangalien.kt.util.RunnerStatus;
 import com.liangalien.kt.util.RunnerThread;
 import com.liangalien.kt.util.RunnerTrigger;
 import com.liangalien.kt.util.RunnerType;
-import org.quartz.Trigger;
+import com.liangalien.kt.util.reqeust.RequestUtil;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -38,9 +40,10 @@ public class TaskService {
 
         // 更新状态
         taskDao.updateStatus(taskId, RunnerStatus.WAITING.getValue());
+        String username = RequestUtil.getUserName();
 
         RunnerThread.create(dto.getKey(), () -> {
-            runner.execute(dto, RunnerTrigger.MANUAL, "admin");
+            runner.execute(dto, RunnerTrigger.MANUAL, username);
         });
     }
 
@@ -82,8 +85,7 @@ public class TaskService {
     }
 
     public List<TaskDTO> getAll(Map<String, Object> body) {
-        Object search = body.get("search");
-        List<TaskDTO> tasks = taskDao.selectAll(search != null ? (Map<String, Object>) search : null);
+        List<TaskDTO> tasks = taskDao.selectAll(body);
         tasks.forEach(task -> {
             CronTriggerImpl trigger = (CronTriggerImpl) quartzService.queryTrigger(task.getKey(), KETTLE_GROUP_NAME);
             if (trigger != null) {
@@ -106,20 +108,21 @@ public class TaskService {
     public void addOrUpdate(TaskDTO taskDto) throws Exception {
         if (taskDto.getId() != null) {
             checkExists(taskDto.getId());
-            taskDto.setUpdateBy("admin");
+            taskDto.setUpdateBy(RequestUtil.getUserName());
             taskDao.update(taskDto);
         } else {
-            taskDto.setCreateBy("admin");
+            taskDto.setCreateBy(RequestUtil.getUserName());
             taskDao.insert(taskDto);
         }
     }
 
     public void remove(BigInteger taskId) throws Exception {
-        TaskDTO taskDTO = checkExists(taskId);
-        if (taskDTO.getStatus() == RunnerStatus.RUNNING.getValue()) {
+        TaskDTO taskDto = checkExists(taskId);
+        if (taskDto.getStatus() == RunnerStatus.RUNNING.getValue()) {
             throw new Exception("任务运行中，请先停止后再删除");
         }
 
-        taskDao.remove(taskId, "admin");
+        removeSchedule(taskDto.getKey());
+        taskDao.remove(taskId, RequestUtil.getUserName());
     }
 }

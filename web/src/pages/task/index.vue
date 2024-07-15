@@ -2,6 +2,7 @@
   <div>
     <ep-table
       ref="table"
+      size="small"
       :columns="columns"
       :request="request"
       :search-field="false"
@@ -20,7 +21,7 @@
               :label="item.label"
             />
           </el-select>
-          <el-select v-model="search.type" style="width: 200px" size="small" clearable placeholder="类型查询">
+          <el-select v-model="search.repo_type" style="width: 200px" size="small" clearable placeholder="类型查询">
             <el-option value="trans" label="转换" />
             <el-option value="job" label="作业" />
           </el-select>
@@ -95,14 +96,12 @@
 
         editShow: false,
         editData: {},
+        search: {},
 
         statusList: Task.statusList,
-        search: {
-          project_id: 1
-        },
         request(option) {
           return new Promise(resolve => {
-            Http.easyPost("/api/task/list", {...option}, resp => {
+            Http.easyPost("/api/task/list", {...option, project_id: Common.getProjectId()}, resp => {
               resolve(resp.body);
             });
           });
@@ -173,7 +172,7 @@
             sortable: true,
             ellipsis: true,
           }, {
-            prop: "create_by",
+            prop: "create_by_name",
             label: "创建者",
             width: 200,
             sortable: true,
@@ -279,13 +278,12 @@
           end = dayjs(times[1]).format('YYYY-MM-DD HH:mm:ss');
         }
         this.$refs.table.search = {
-          search: {
-            type: this.search.type || undefined,
-            status: Common.isBlank(this.search.status) ? undefined : this.search.status,
-            keyword: this.search.keyword || undefined,
-            start,
-            end
-          }
+          ...this.search,
+          repo_type: this.search.repo_type || undefined,
+          status: Common.isBlank(this.search.status) ? undefined : this.search.status,
+          keyword: this.search.keyword || undefined,
+          start,
+          end
         };
         this.$refs.table.refresh();
       },

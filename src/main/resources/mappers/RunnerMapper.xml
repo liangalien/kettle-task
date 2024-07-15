@@ -16,9 +16,6 @@
             <if test="taskId != null">
                 task_id = #{taskId},
             </if>
-            <if test="trigger != null">
-                `trigger` = #{trigger},
-            </if>
             <if test="status != null">
                 status = #{status},
             </if>
@@ -34,14 +31,21 @@
         </set>
         where id = #{id}
     </update>
+
+    <sql id="select">
+        r.*, t.project_id, t.name as task_name,
+       fr.file_type as repo_type, fr.file_name as repo_name,
+       p.`key` as project_key, p.name as project_name, cu.nickname as create_by_name
+    </sql>
+
     <select id="selectAll" resultType="com.liangalien.kt.dto.RunnerDTO">
-        select r.*, t.project_id, t.name as task_name,
-               fr.file_type as repo_type, fr.file_name as repo_name,
-               p.`key` as project_key, p.name as project_name
+        select
+            <include refid="select"></include>
         from kt_runner r
         join kt_task t on r.task_id = t.id
         join kt_file_repo fr on fr.id = t.repo_id
         join kt_project p on t.project_id=p.id
+        left join kt_user cu on r.create_by=cu.username
         where t.is_deleted = 0 and fr.is_deleted = 0
         <if test="search != null and search.project_id != null">
             and t.project_id = #{search.project_id}
@@ -64,13 +68,13 @@
     </select>
 
     <select id="selectById" resultType="com.liangalien.kt.dto.RunnerDTO">
-        select r.*, t.project_id, t.name as task_name,
-               fr.file_type as repo_type, fr.file_name as repo_name,
-               p.`key` as project_key, p.name as project_name
+        select
+            <include refid="select"></include>
         from kt_runner r
-                 join kt_task t on r.task_id = t.id
-                 join kt_file_repo fr on fr.id = t.repo_id
-                 join kt_project p on t.project_id=p.id
+        join kt_task t on r.task_id = t.id
+        join kt_file_repo fr on fr.id = t.repo_id
+        join kt_project p on t.project_id=p.id
+        left join kt_user cu on r.create_by=cu.username
         where t.is_deleted = 0 and fr.is_deleted = 0 and r.id = #{id}
     </select>
 </mapper>

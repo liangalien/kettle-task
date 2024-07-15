@@ -20,6 +20,8 @@ public class FileRepoDTO {
     private String fileType;
     private String createBy;
     private String updateBy;
+    private String createByName;
+    private String updateByName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

@@ -2,7 +2,9 @@ package com.liangalien.kt.util.reqeust;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
+import com.liangalien.kt.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,5 +73,10 @@ public class RequestUtil {
         String sortBy = body.get("sortBy") != null ? getSortBy(body.get("sortBy")) : defaultSortBy;
 
         PageHelper.startPage(pageNo, pageSize, sortBy);
+    }
+
+    public static String getUserName() {
+        UserDTO curUser = (UserDTO) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return curUser.getUsername();
     }
 }

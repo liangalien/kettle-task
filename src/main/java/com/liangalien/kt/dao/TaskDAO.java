@@ -20,6 +20,8 @@ public interface TaskDAO {
     void updateStatus(@Param("id") BigInteger id, @Param("status") int status);
 
     TaskDTO selectById(@Param("id") BigInteger id);
+
+    List<TaskDTO> selectByRepoId(@Param("repoId") BigInteger repoId);
     List<TaskDTO> selectAll(@Param("search") Map<String, Object> search);
 
 }

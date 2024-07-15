@@ -2,7 +2,7 @@ package com.liangalien.kt.util;
 
 public enum RunnerTrigger {
     MANUAL(1, "手动触发"),
-    AUTO(2, "自动触发");
+    CRON(2, "定时触发");
 
     private int value;
     private String desc;

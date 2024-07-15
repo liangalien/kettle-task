@@ -1,61 +1,70 @@
-CREATE TABLE `kt_task` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `project_id` bigint(20) NOT NULL COMMENT '项目ID',
-    `repo_id` bigint(20) NOT NULL COMMENT '资源ID',
-    `status` int(2) NOT NULL DEFAULT '0' COMMENT '运行状态',
-    `last_start_time` timestamp NULL DEFAULT NULL COMMENT '最后一次开始时间',
-    `last_end_time` timestamp NULL DEFAULT NULL COMMENT '最后一次结束时间',
-    `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件名',
-    `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
-    `log_level` int(11) NOT NULL DEFAULT '3' COMMENT '运行日志等级。0:Nothing,1:Error,2:Minimal,3:Basic,4:Detailed,5:Debug,6:Rowlevel',
-    `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
-    `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
-    `update_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务';
-
-CREATE TABLE `kt_runner` (
-     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-     `task_id` bigint(20) NOT NULL COMMENT '任务ID',
-     `trigger` int(1) NOT NULL DEFAULT '1' COMMENT '触发方式。1：手动，2：定时',
-     `status` int(2) NOT NULL DEFAULT '0' COMMENT '运行状态',
-     `start_time` timestamp NULL DEFAULT NULL COMMENT '最后一次开始时间',
-     `end_time` timestamp NULL DEFAULT NULL COMMENT '最后一次结束时间',
-     `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
-     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-     PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='运行记录'
+CREATE TABLE `kt_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户名',
+  `nickname` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '昵称',
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(11) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '手机号',
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '密码邮箱',
+  `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户';
 
 CREATE TABLE `kt_project` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'key',
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '项目名',
   `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
-  `create_by` bigint(20) NOT NULL COMMENT '创建人',
-  `update_by` bigint(20) NOT NULL COMMENT '更新人',
+  `create_by` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
+  `update_by` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='项目';
 
 CREATE TABLE `kt_file_repo` (
-    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `project_id` bigint(20) unsigned NOT NULL,
-    `file_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件名',
-    `file_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件类型',
-    `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
-    `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
-    `update_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',
-    `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) unsigned NOT NULL,
+  `file_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件名',
+  `file_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件类型',
+  `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
+  `update_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文件资源';
 
-insert into kt_project
-(id, `key`, name, is_deleted, create_by, update_by, create_time, update_time)
-values(1, 'test', '测试', 0, 1, 1, now(), now());
+CREATE TABLE `kt_task` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `project_id` bigint(20) NOT NULL COMMENT '项目ID',
+  `repo_id` bigint(20) NOT NULL COMMENT '资源ID',
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '运行状态',
+  `last_start_time` timestamp NULL DEFAULT NULL COMMENT '最后一次开始时间',
+  `last_end_time` timestamp NULL DEFAULT NULL COMMENT '最后一次结束时间',
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件名',
+  `description` varchar(500) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '描述',
+  `log_level` int(11) NOT NULL DEFAULT '3' COMMENT '运行日志等级。0:Nothing,1:Error,2:Minimal,3:Basic,4:Detailed,5:Debug,6:Rowlevel',
+  `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
+  `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
+  `update_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务';
+
+CREATE TABLE `kt_runner` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) NOT NULL COMMENT '任务ID',
+  `trigger` int(1) NOT NULL DEFAULT '1' COMMENT '触发方式。1：手动，2：定时',
+  `status` int(2) NOT NULL DEFAULT '0' COMMENT '运行状态',
+  `start_time` timestamp NULL DEFAULT NULL COMMENT '最后一次开始时间',
+  `end_time` timestamp NULL DEFAULT NULL COMMENT '最后一次结束时间',
+  `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='运行记录';
 
 create table `qrtz_calendars` (
                                   `sched_name` varchar(120) not null,

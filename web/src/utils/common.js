@@ -165,17 +165,16 @@ Common.removeStorage = (name) => {
   return window.localStorage.removeItem(name);
 };
 
-Common.getProjectKey = () => {
-  const projectEle = document.getElementById('prj');
-  return projectEle && projectEle.value || Common.getStorage('project_key');
+Common.getProjectId = () => {
+  return Common.getStorage('project_id');
 };
 
 Common.getProjectName = () => {
   return Common.getStorage('project_name');
 };
 
-Common.setProject = (key, name) => {
-  Common.setStorage('project_key', key);
+Common.setProject = (id, name) => {
+  Common.setStorage('project_id', id);
   Common.setStorage('project_name', name);
 };
 

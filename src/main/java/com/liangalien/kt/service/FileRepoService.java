@@ -6,9 +6,13 @@ import com.liangalien.kt.dao.ProjectDAO;
 import com.liangalien.kt.dao.TaskDAO;
 import com.liangalien.kt.dto.FileRepoDTO;
 import com.liangalien.kt.dto.ProjectDTO;
+import com.liangalien.kt.dto.TaskDTO;
+import com.liangalien.kt.dto.UserDTO;
+import com.liangalien.kt.util.reqeust.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +38,10 @@ public class FileRepoService {
 
     @Autowired
     private TaskDAO taskDao;
+
+
+    @Autowired
+    private TaskService taskService;
 
     public List<FileRepoDTO> selectAll(Map<String, Object> body) {
         List<FileRepoDTO> fileRepos = fileRepoDao.selectAll(body);
@@ -78,11 +86,11 @@ public class FileRepoService {
             dto.setProjectId(projectId);
             dto.setFileName(fileName);
             dto.setFileType(fileName.endsWith(".ktr") ? "trans" : "job");
-            dto.setCreateBy("admin");
+            dto.setCreateBy(RequestUtil.getUserName());
             fileRepoDao.insert(dto);
         } else {
             dto.setIsDeleted(0);
-            dto.setUpdateBy("admin");
+            dto.setUpdateBy(RequestUtil.getUserName());
             fileRepoDao.update(dto);
         }
     }
@@ -90,14 +98,22 @@ public class FileRepoService {
     public void remove(BigInteger id) throws Exception {
         FileRepoDTO dto = checkExists(id, true);
 
+        List<TaskDTO> tasks = taskDao.selectByRepoId(id);
+        tasks.forEach(task -> {
+            try {
+                taskService.remove(task.getId());
+            } catch (Exception e) {
+
+            }
+        });
+
         File file = new File(String.format("%s/%s/%s", localRepoPath, dto.getProjectKey(), dto.getFileName()));
         if (file.exists()) {
             log.info("删除文件：{}", file.getPath());
             file.delete();
         }
 
-        taskDao.removeByRepoId(id, "admin");
-        fileRepoDao.remove(id, "admin");
+        fileRepoDao.remove(id, RequestUtil.getUserName());
     }
 
 
