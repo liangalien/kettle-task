@@ -34,7 +34,7 @@
 
     <sql id="select">
         r.*, t.project_id, t.name as task_name,
-       fr.file_type as repo_type, fr.file_name as repo_name,
+       fr.id as repo_id, fr.file_type as repo_type, fr.file_name as repo_name,
        p.`key` as project_key, p.name as project_name, cu.nickname as create_by_name
     </sql>
 

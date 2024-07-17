@@ -125,7 +125,8 @@
                     this.editShow = true;
                   }}><el-tag
                     size="small"
-                    type="info"
+                    effect="plain"
+                    type={row.repo_type === 'trans' ? 'info' : 'success'}
                     style="margin-right: 10px"
                   >{row.repo_type === 'trans' ? '转换' : '作业'}
                   </el-tag>{value}</EpLink>

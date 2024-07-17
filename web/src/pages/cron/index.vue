@@ -41,8 +41,7 @@
           },  {
             prop: "next_fire_time",
             label: "下次触发时间",
-            ellipsis: true,
-            show: false
+            ellipsis: true
           }, {
             label: "操作",
             width: 100,

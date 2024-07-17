@@ -4,21 +4,27 @@ package com.liangalien.kt.service;
 import com.liangalien.kt.dao.FileRepoDAO;
 import com.liangalien.kt.dao.ProjectDAO;
 import com.liangalien.kt.dao.TaskDAO;
-import com.liangalien.kt.dto.FileRepoDTO;
-import com.liangalien.kt.dto.ProjectDTO;
-import com.liangalien.kt.dto.TaskDTO;
-import com.liangalien.kt.dto.UserDTO;
+import com.liangalien.kt.dto.*;
+import com.liangalien.kt.kettle.Runner;
+import com.liangalien.kt.util.KettleUtil;
+import com.liangalien.kt.util.RunnerType;
 import com.liangalien.kt.util.reqeust.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.pentaho.di.job.JobMeta;
+import org.pentaho.di.repository.filerep.KettleFileRepository;
+import org.pentaho.di.trans.TransMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +48,10 @@ public class FileRepoService {
 
     @Autowired
     private TaskService taskService;
+
+
+    @Autowired
+    private Runner runner;
 
     public List<FileRepoDTO> selectAll(Map<String, Object> body) {
         List<FileRepoDTO> fileRepos = fileRepoDao.selectAll(body);
@@ -116,6 +126,36 @@ public class FileRepoService {
         fileRepoDao.remove(id, RequestUtil.getUserName());
     }
 
+
+    public RepoImageDTO getImage(BigInteger id) throws Exception {
+        FileRepoDTO dto = checkExists(id, true);
+
+        KettleFileRepository projectRepo = runner.connectLocalRepo(dto.getProjectId(), dto.getProjectKey());
+
+
+        BufferedImage bufferedImage;
+        if (RunnerType.TRANS.getValue().equals(dto.getFileType())) {
+            TransMeta transMeta = projectRepo.loadTransformation(
+                    dto.getFileName().replace(".ktr", ""), null,
+                    null, true, null);
+            bufferedImage = KettleUtil.generateTransImage(transMeta);
+        } else {
+            JobMeta jobMeta = projectRepo.loadJob(dto.getFileName().replace(".kjb", ""),
+                    null, null, null);
+            bufferedImage = KettleUtil.generateJobImage(jobMeta);
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "png", baos); // 将 BufferedImage 写入 ByteArrayOutputStream
+        byte[] imageBytes = baos.toByteArray();
+
+        RepoImageDTO repoImageDto = new RepoImageDTO();
+        repoImageDto.setSrc("data:image/png;base64," + Base64.getEncoder().encodeToString(imageBytes));
+        repoImageDto.setHeight(bufferedImage.getHeight());
+        repoImageDto.setWidth(bufferedImage.getWidth());
+
+        return repoImageDto;
+    }
 
     public FileRepoDTO checkExists(BigInteger id, boolean isThrow) throws Exception {
         FileRepoDTO dto = fileRepoDao.selectById(id);

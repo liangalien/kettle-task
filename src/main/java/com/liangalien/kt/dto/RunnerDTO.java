@@ -16,6 +16,7 @@ public class RunnerDTO {
     private BigInteger taskId;
     private String projectKey;
     private String taskName;
+    private BigInteger repoId;
     private String repoName;
     private String repoType;
     private int trigger;

@@ -48,6 +48,7 @@
       </template>
     </ep-table>
     <log-drawer :visible.sync="logShow" :data="logData"/>
+    <repo-preview v-model="previewShow" :repo-id="previewRepoId"/>
   </div>
 </template>
 
@@ -56,16 +57,20 @@
   import Task from "@utils/task";
   import Common from "@utils/common";
   import EpLink from "@components/link/link";
+  import RepoPreview from "@pages/repo/preview";
   import LogDrawer from "./log";
   import dayjs from 'dayjs';
 
   export default {
     name: "RunnerList",
-    components: {EpLink, LogDrawer},
+    components: {EpLink, LogDrawer, RepoPreview},
     data() {
       return {
         logShow: false,
         logData: {},
+
+        previewShow: false,
+        previewRepoId: null,
 
         statusList: Task.statusList,
         search: {
@@ -96,7 +101,8 @@
                 <span>
                   <el-tag
                     size="small"
-                    type="info"
+                    effect="plain"
+                    type={row.repo_type === 'trans' ? 'info' : 'success'}
                     style="margin-right: 10px"
                   >{row.repo_type === 'trans' ? '转换' : '作业'}
                   </el-tag>
@@ -160,6 +166,12 @@
                 }}>日志
                 </EpLink>
 
+                <EpLink  style="margin: 0 5px" onClick={() => {
+                  this.previewRepoId = row.repo_id;
+                  this.previewShow = true;
+                }}>图像
+                </EpLink>
+
                 {[1, 2, 3].indexOf(row.status) !== -1 && <el-popover
                   width='160'
                   ref={'deletePop' + scope.$index}
@@ -179,7 +191,7 @@
                       确定
                     </el-button>
                   </div>
-                  <EpLink style="margin-left: 5px" slot="reference">停止</EpLink>
+                  <EpLink slot="reference">停止</EpLink>
                 </el-popover> ||
 
                 <el-popover
@@ -202,7 +214,7 @@
                                }}>确定
                     </el-button>
                   </div>
-                  <EpLink style="margin-left: 5px" slot="reference">重跑</EpLink>
+                  <EpLink slot="reference">重跑</EpLink>
                 </el-popover>}
               </div>;
             }

@@ -45,4 +45,9 @@ public class FileRepoController {
         fileRepoService.remove(new BigInteger(id));
         return Response.success();
     }
+
+    @GetMapping("/image")
+    public Response image(@RequestParam("id") String id) throws Exception {
+        return Response.success(fileRepoService.getImage(new BigInteger(id)));
+    }
 }

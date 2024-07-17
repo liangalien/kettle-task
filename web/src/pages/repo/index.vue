@@ -14,18 +14,25 @@
         </div>
       </template>
     </ep-table>
+
+    <repo-preview v-model="previewShow" :repo-id="previewRepoId"/>
   </div>
 </template>
 
 <script>
   import Http from "@utils/http";
   import EpLink from "@components/link/link";
-  import Common from "@utils/common";
+  import Common from "@utils/common"
+  import RepoPreview from "./preview";
 
   export default {
     name: "RepoList",
+    components: {RepoPreview},
     data() {
       return {
+        previewShow: false,
+        previewRepoId: null,
+
         uploading: false,
         request(option) {
           return new Promise(resolve => {
@@ -45,7 +52,13 @@
             prop: "file_name",
             label: "文件名",
             sortable: true,
-            ellipsis: true
+            ellipsis: true,
+            render: (h, {row, value, scope}) => {
+              return <EpLink onClick={() => {
+                this.previewRepoId = row.id;
+                this.previewShow = true;
+              }}>{value}</EpLink>
+            }
           }, {
             prop: "create_time",
             label: "上传时间",
@@ -98,6 +111,9 @@
       }
     },
     methods: {
+      imageClose() {
+        this.imageShow = false
+      },
       onUpload(event) {
         let files = event.target.files
         if (files.length === 0) {
@@ -129,7 +145,7 @@
         }, 500);
 
       },
-    },
+    }
   }
 </script>
 
