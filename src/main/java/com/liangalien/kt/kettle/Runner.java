@@ -229,13 +229,23 @@ public class Runner {
         }
     }
 
+
+    public static Trans getTrans(String taskKey) {
+        return transMap.get(taskKey);
+    }
+
+    public static Job getJob(String taskKey) {
+        return jobMap.get(taskKey);
+    }
+
+
     /**
      * 强制停止转换
      * @param taskKey 任务KEY
      * @return 停止之前是否已经完成了
      */
     public static boolean transStop(String taskKey) {
-        Trans trans = transMap.get(taskKey);
+        Trans trans = getTrans(taskKey);
         if (trans == null) {
             return true;
         }
@@ -260,7 +270,7 @@ public class Runner {
      * @return 停止之前是否已经完成了
      */
     public static boolean jobStop(String taskKey) {
-        Job job = jobMap.get(taskKey);
+        Job job = getJob(taskKey);
         if (job == null) {
             return true;
         }

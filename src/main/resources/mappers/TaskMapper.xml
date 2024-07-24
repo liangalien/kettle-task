@@ -8,6 +8,7 @@
         p.name as project_name,
         fr.file_name as repo_name,
         fr.file_type as repo_type,
+        fr.file_img as repo_img,
         cu.nickname as create_by_name,
         uu.nickname as update_by_name
     </sql>

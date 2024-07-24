@@ -15,7 +15,7 @@
       </template>
     </ep-table>
 
-    <repo-preview v-model="previewShow" :repo-id="previewRepoId"/>
+    <repo-preview v-model="previewShow" :url="previewUrl"/>
   </div>
 </template>
 
@@ -31,7 +31,7 @@
     data() {
       return {
         previewShow: false,
-        previewRepoId: null,
+        previewUrl: null,
 
         uploading: false,
         request(option) {
@@ -53,10 +53,14 @@
             label: "文件名",
             sortable: true,
             ellipsis: true,
-            render: (h, {row, value, scope}) => {
+            render: (h, {row, value}) => {
               return <EpLink onClick={() => {
-                this.previewRepoId = row.id;
-                this.previewShow = true;
+                if (row.file_img) {
+                  this.previewUrl = row.file_img;
+                  this.previewShow = true;
+                } else {
+                  this.$message.error('文件预览图未生成，可尝试重新上传');
+                }
               }}>{value}</EpLink>
             }
           }, {

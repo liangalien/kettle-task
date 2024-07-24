@@ -48,7 +48,7 @@
       </template>
     </ep-table>
     <log-drawer :visible.sync="logShow" :data="logData"/>
-    <repo-preview v-model="previewShow" :repo-id="previewRepoId"/>
+    <repo-preview v-model="previewShow" :url="previewUrl"/>
   </div>
 </template>
 
@@ -70,7 +70,7 @@
         logData: {},
 
         previewShow: false,
-        previewRepoId: null,
+        previewUrl: null,
 
         statusList: Task.statusList,
         search: {
@@ -167,7 +167,7 @@
                 </EpLink>
 
                 <EpLink  style="margin: 0 5px" onClick={() => {
-                  this.previewRepoId = row.repo_id;
+                  this.previewUrl = row.repo_img;
                   this.previewShow = true;
                 }}>图像
                 </EpLink>

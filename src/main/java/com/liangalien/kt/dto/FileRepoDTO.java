@@ -18,6 +18,7 @@ public class FileRepoDTO {
     private String projectKey;
     private String fileName;
     private String fileType;
+    private String fileImg;
     private String createBy;
     private String updateBy;
     private String createByName;

@@ -28,6 +28,7 @@ CREATE TABLE `kt_file_repo` (
   `project_id` bigint(20) unsigned NOT NULL,
   `file_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件名',
   `file_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '文件类型',
+  `file_img` longtext COLLATE utf8mb4_unicode_ci COMMENT '预览图base64',
   `is_deleted` int(1) NOT NULL DEFAULT '0' COMMENT '是否已删除',
   `create_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '创建人',
   `update_by` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '更新人',

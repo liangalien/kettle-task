@@ -6,7 +6,7 @@ import com.liangalien.kt.dao.ProjectDAO;
 import com.liangalien.kt.dao.TaskDAO;
 import com.liangalien.kt.dto.*;
 import com.liangalien.kt.kettle.Runner;
-import com.liangalien.kt.util.KettleUtil;
+import com.liangalien.kt.kettle.KettleUtil;
 import com.liangalien.kt.util.RunnerType;
 import com.liangalien.kt.util.reqeust.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -97,10 +98,13 @@ public class FileRepoService {
             dto.setFileName(fileName);
             dto.setFileType(fileName.endsWith(".ktr") ? "trans" : "job");
             dto.setCreateBy(RequestUtil.getUserName());
+            dto.setFileImg(getImage(dto).getSrc());
             fileRepoDao.insert(dto);
         } else {
             dto.setIsDeleted(0);
             dto.setUpdateBy(RequestUtil.getUserName());
+            dto.setUpdateTime(LocalDateTime.now());
+            dto.setFileImg(getImage(dto).getSrc());
             fileRepoDao.update(dto);
         }
     }
@@ -127,11 +131,8 @@ public class FileRepoService {
     }
 
 
-    public RepoImageDTO getImage(BigInteger id) throws Exception {
-        FileRepoDTO dto = checkExists(id, true);
-
+    public RepoImageDTO getImage(FileRepoDTO dto) throws Exception {
         KettleFileRepository projectRepo = runner.connectLocalRepo(dto.getProjectId(), dto.getProjectKey());
-
 
         BufferedImage bufferedImage;
         if (RunnerType.TRANS.getValue().equals(dto.getFileType())) {
@@ -145,6 +146,15 @@ public class FileRepoService {
             bufferedImage = KettleUtil.generateJobImage(jobMeta);
         }
 
+        return createImageData(bufferedImage);
+    }
+
+    public RepoImageDTO getImage(BigInteger repoId) throws Exception {
+        FileRepoDTO dto = checkExists(repoId, true);
+        return getImage(dto);
+    }
+
+    public RepoImageDTO createImageData(BufferedImage bufferedImage) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "png", baos); // 将 BufferedImage 写入 ByteArrayOutputStream
         byte[] imageBytes = baos.toByteArray();
@@ -156,6 +166,7 @@ public class FileRepoService {
 
         return repoImageDto;
     }
+
 
     public FileRepoDTO checkExists(BigInteger id, boolean isThrow) throws Exception {
         FileRepoDTO dto = fileRepoDao.selectById(id);

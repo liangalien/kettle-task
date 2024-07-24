@@ -56,11 +56,17 @@
             <if test="fileType != null">
                 file_type = #{fileType},
             </if>
+            <if test="fileImg != null">
+                file_img = #{fileImg},
+            </if>
             <if test="isDeleted != null">
                 is_deleted = #{isDeleted},
             </if>
             <if test="updateBy != null">
                 update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
             </if>
         </set>
         where id = #{id}

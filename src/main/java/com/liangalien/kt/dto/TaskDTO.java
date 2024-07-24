@@ -20,6 +20,7 @@ public class TaskDTO {
     private BigInteger repoId;
     private String repoName;
     private String repoType;
+    private String repoImg;
     private String name;
     private String description;
     private int status;

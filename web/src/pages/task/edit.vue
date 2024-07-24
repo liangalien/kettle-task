@@ -40,7 +40,12 @@
         <el-button size="small" type="primary" @click="onSave">保存</el-button>
         <el-button size="small" @click="onClose">取消</el-button>
       </div>
+
+      <el-image v-if="repoImgUrl" :src="repoImgUrl" :preview-src-list="[repoImgUrl]" style="margin-top: 50px"/>
+      <el-empty v-else description="暂无预览图"/>
     </el-drawer>
+
+
   </div>
 </template>
 
@@ -73,7 +78,8 @@
         rules: {
           repo: [{ required: true, message: '不能为空', trigger: 'blur' }],
           name: [{ required: true, message: '不能为空', trigger: 'blur' }],
-        }
+        },
+        repoImgUrl: null,
       };
     },
     methods: {
@@ -107,13 +113,19 @@
           if (this.data.id) {
             this.form = {
               id: this.data.id,
-              repo: {value: this.data.repo_id, label: this.data.repo_name},
+              repo: {value: this.data.repo_id, label: this.data.repo_name, file_img: this.data.repo_img},
               name: this.data.name,
               description: this.data.description,
               logLevel: this.data.log_level
             }
+          } else {
+            this.repoImgUrl = null;
           }
         }
+      },
+      'form.repo': function (data) {
+        this.repoImgUrl = data.file_img;
+        this.form.name = data.label.substring(0, data.label.length - 4);
       }
     }
   };

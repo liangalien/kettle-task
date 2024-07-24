@@ -128,6 +128,8 @@ http://127.0.0.1:8020
 
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.png?raw=true)
 
+![image](https://github.com/liangalien/kettle-task/blob/main/images/%E8%B5%84%E6%BA%90%E5%9B%BE%E7%89%87%E9%A2%84%E8%A7%88.png?raw=true)
+
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%901.png?raw=true)
 
 ![image](https://github.com/liangalien/kettle-task/blob/main/images/%E4%BB%BB%E5%8A%A1%E9%9B%86%E6%88%902.png?raw=true)

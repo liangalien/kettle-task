@@ -19,6 +19,7 @@ public class RunnerDTO {
     private BigInteger repoId;
     private String repoName;
     private String repoType;
+    private String repoImg;
     private int trigger;
     private int status;
     private String createBy;
